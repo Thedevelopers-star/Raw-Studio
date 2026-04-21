@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxury Scroll Smart Lock</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family: 'Segoe UI', sans-serif;
+  overflow-x:hidden;
+  scroll-snap-type:y mandatory;
+}
+
+/* --- THE INITIAL LOGO OVERLAY --- */
+.intro-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  position: fixed;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #013220;
+  z-index: 10;
+  transition: all 1s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.intro-container.shrunk {
+  height: max-content; 
+  top: 0;
+  transform: translateY(0);
+}
+
+.logo-wrapper {
+  text-align: center;
+  transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.intro-container.shrunk .logo-wrapper {
+  transform: scale(0.35);
+}
+
+.logo-text {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 12px;
+  display: block;
+  min-height: 1em; 
+  text-transform: uppercase;
+  text-transform: capitalize;
+    
+    /* 1. The Magic Properties */
+    background-image: url('image1.jpg'); /* Use a high-contrast art image */
+    background-size: cover;
+    background-position: center;
+    
+    /* 2. Clipping the background to the text shape */
+    -webkit-background-clip: text; /* For Safari/Chrome */
+    background-clip: text;
+    
+    /* 3. Making the actual text transparent so the background shows through */
+    color: transparent;
+    
+    /* 4. Optional: Adding a slight stroke so the letters are visible against the dark green */
+    -webkit-text-stroke: 1px rgba(245, 222, 179, 0.2);
+}
+
+/* --- THE UNDERLINE ANIMATION --- */
+.underline {
+  height: 4px;
+  background: #F5DEB3; /* Wheat Underline */
+  width: 100%;
+  margin-top: 10px;
+  transform: scaleX(0); 
+  transform-origin: left; 
+  opacity: 0;
+  transition: transform 0.8s ease-out 0.2s, opacity 0.3s ease 0.2s;
+}
+
+.underline.draw {
+  transform: scaleX(0.5); 
+  opacity: 1;
+}
+
+/* --- THEME VARIABLES --- */
+:root {
+    --forest-green: #013220;
+    --wheat: #F5DEB3;
+    --glass-white: rgba(245, 222, 179, 0.05);
+}
+
+.visual-hero {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    background-color: var(--forest-green);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px;
+    overflow: hidden;
+    font-family: 'Playfair Display', serif;
+}
+
+/* --- NAVIGATION --- */
+.hero-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--wheat);
+    font-size: 12px;
+    letter-spacing: 2px;
+    z-index: 10;
+}
+
+.nav-cta {
+    border: 1px solid var(--wheat);
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.nav-cta:hover {
+    background: var(--wheat);
+    color: var(--forest-green);
+}
+
+/* --- CENTER CONTENT & TYPOGRAPHY --- */
+.hero-title-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-title {
+    font-size: 15vw;
+    line-height: 0.8;
+    margin: 0;
+    text-transform: capitalize;
+    
+    /* 1. The Magic Properties */
+    background-image: url('image1.jpg'); /* Use a high-contrast art image */
+    background-size: cover;
+    background-position: center;
+    
+    /* 2. Clipping the background to the text shape */
+    -webkit-background-clip: text; /* For Safari/Chrome */
+    background-clip: text;
+    
+    /* 3. Making the actual text transparent so the background shows through */
+    color: transparent;
+    
+    /* 4. Optional: Adding a slight stroke so the letters are visible against the dark green */
+    -webkit-text-stroke: 1px rgba(245, 222, 179, 0.2);
+}
+
+/* If you want the 'Back' and 'Front' to have different images or positions */
+.title-back {
+    z-index: 1;
+    filter: brightness(0.7); /* Make the back text look deeper */
+}
+
+.title-front {
+    z-index: 3;
+    background-image: url('image1.jpg'); /* Different image for the front */
+}
+
+.central-artwork {
+    position: relative;
+    width: 35vw;
+    height: 35vw;
+    margin: -7vw 0; /* Pulls the text together */
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glass-orb {
+    width: 100%;
+    height: 100%;
+    
+    /* 1. Base Color + The Layers */
+    /* This background-color is what the image will "turn into" */
+    background-color: #013220; /* Change to #F5DEB3 for a Wheat shade */
+
+    background-image: 
+        radial-gradient(circle at 30% 30%, rgba(1, 50, 32, 0.4), rgba(1, 50, 32, 0.1)),
+        url('image1.jpg');
+
+    /* 2. The Blending Magic */
+    /* 'luminosity' makes the image pixels adopt the 'background-color' entirely */
+    background-blend-mode: screen, luminosity;
+    
+    /* 3. Positioning */
+    background-size: cover;
+    background-position: center;
+    
+    /* 4. Glass Aesthetics */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(245, 222, 179, 0.3);
+    box-shadow: 
+        inset 0 0 50px rgba(245, 222, 179, 0.2),
+        0 20px 50px rgba(0, 0, 0, 0.6);
+
+    /* 5. Shape & Animation */
+    border-radius: 30% 60% 90% 30% / 30% 50% 90% 10%;
+    animation: morph 3s ease-in-out infinite;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Optional: To make the green look more vibrant/luxury */
+.glass-orb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    filter: contrast(1.2) brightness(0.8);
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes morph {
+    0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+    50% { border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%; }
+    100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+}
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+    .hero-title { font-size: 20vw; }
+    .central-artwork { width: 60vw; height: 60vw; }
+}
+
+/* --- HIGHLIGHT & SUBTEXT --- */
+.hero-text-content {
+    position: absolute;
+    /* Centering logic for hero-text */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    bottom: 15%; 
+    width: 90%;
+    max-width: 600px;
+    z-index: 10;
+    color: var(--wheat);
+    font-family: 'Playfair Display', serif;
+
+    /* Initial hidden state */
+    opacity: 0;
+    transform: translateX(-50%) translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Animated state when in middle of viewport */
+.hero-text-content.animate-in {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.highlight-text {
+    font-size: 2.2rem;
+    font-weight: 400;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    line-height: 1.2;
+}
+
+.subtext {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.8;
+    letter-spacing: 0.5px;
+    font-weight: 300;
+}
+
+/* --- EXPLORE MORE (Inverted >) --- */
+.explore-more {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    /* Keep your existing layout transform */
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 10;
+    cursor: pointer;
+
+    /* Initial hidden state */
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+}
+
+/* Animated state */
+.explore-more.animate-in {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.explore-more span {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--wheat);
+    opacity: 0.6;
+}
+
+.inverted-chevron {
+    width: 20px;
+    height: 20px;
+    border-right: 1px solid var(--wheat);
+    border-bottom: 1px solid var(--wheat);
+    transform: rotate(45deg); /* Creates the inverted > look */
+    animation: bounce 2s infinite;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(45deg); }
+    40% { transform: translateY(-10px) rotate(45deg); }
+    60% { transform: translateY(-5px) rotate(45deg); }
+}
+
+/* Responsive Fix for Mobile */
+@media (max-width: 768px) {
+    .hero-text-content {
+        left: 20px;
+        bottom: 20%;
+        padding-right: 20px;
+    }
+    .highlight-text { font-size: 1.6rem; }
+    .subtext { font-size: 0.85rem; }
+}
+
+/* --- SECTION LAYOUT --- */
+.signature-section {
+    padding: 150px 8%;
+    background: linear-gradient(-5deg,#F5DEB3, #013220 );
+    overflow: hidden;
+}
+
+.signature-grid {
+    display: grid;
+    grid-template-areas: 
+        "a c"
+        "b c";
+    grid-template-columns: 1fr 1.1fr;
+    grid-template-rows: 450px 450px;
+    gap: 80px; 
+}
+
+.item-a { grid-area: a; }
+.item-b { grid-area: b; align-self: end; }
+.item-c { grid-area: c; }
+
+/* --- THE ART CARD --- */
+.art-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background: linear-gradient(-5deg, #F5DEB3, #013220);
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeInUp 1s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+    /* Prevents blue highlight on mobile tap */
+    -webkit-tap-highlight-color: transparent; 
+}
+
+.item-a { animation-delay: 0.2s; }
+.item-b { animation-delay: 0.4s; }
+.item-c { animation-delay: 0.6s; }
+
+.art-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.art-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.8) brightness(0.9);
+    transition: transform 1.2s cubic-bezier(0.2, 1, 0.3, 1), filter 0.8s ease;
+}
+
+/* --- THE HIDDEN REVEAL --- */
+.hover-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(1, 50, 32, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    z-index: 5;
+    
+    /* Strict Hidden State */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    
+    backdrop-filter: blur(0px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-content {
+    text-align: center;
+    color: #F5DEB3;
+    transform: translateY(20px);
+    transition: transform 0.5s ease;
+}
+
+/* --- INTERACTION TRIGGER (Hover + Mobile Tap) --- */
+.art-card:hover .hover-overlay,
+.art-card:active .hover-overlay {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    backdrop-filter: blur(12px);
+}
+
+.art-card:hover .reveal-content,
+.art-card:active .reveal-content {
+    transform: translateY(0);
+}
+
+.art-card:hover img {
+    transform: scale(1.05);
+    filter: saturate(1.1) brightness(1.1);
+}
+
+/* --- TYPOGRAPHY --- */
+.art-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.art-details {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.6;
+    margin-bottom: 25px;
+}
+
+.hover-description p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-weight: 300;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+/* --- RECTIFIED MOBILE VIEW --- */
+@media (max-width: 900px) {
+    .signature-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+    }
+    
+    .art-card { height: 50vh; }
+
+    /* Asymmetric width/alignment maintained */
+    .item-a { width: 95%; align-self: flex-start; }
+    .item-b { width: 85%; align-self: flex-end; }
+    .item-c { width: 100%; align-self: center; }
+
+    /* Text size adjustment for smaller screens */
+    .art-title { font-size: 1.6rem; }
+    .hover-description p { font-size: 0.85rem; }
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.philosophy-section {
+    padding: 180px 10%;
+    background:linear-gradient(5deg, rgba(1, 42, 27, 0.47), #F5DEB3 );
+    color: #013220; /* Forest Green Text */
+    overflow: hidden;
+}  
+
+.philosophy-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* --- GREENISH GLASS CARD --- */
+.glass-card {
+    flex: 1;
+    max-width: 100vw;
+    text-align: center;
+    padding: 60px;
+    background: rgba(1, 50, 32, 0.25); /* Forest Green with Transparency */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(245, 222, 179, 0.2);
+    border-radius: 30% 60% 90% 30% / 30% 50% 90% 10%;
+    animation: morph 3s ease-in-out infinite;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+}
+
+.section-label {
+    color: #F5DEB3;
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+.statement-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 40px;
+    color: #F5DEB3; /* Wheat text inside the green glass */
+}
+
+.philosophy-paragraph {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    font-weight: 300;
+    color: #F5DEB3;
+    opacity: 0.9;
+    margin-bottom: 40px;
+}
+
+.sig-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #F5DEB3;
+}
+
+/* --- THE MIRROR GLOW EFFECT (Any Word) --- */
+.glow-text span {
+    display: inline-block;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+}
+
+.glow-text span:hover {
+    color: #ffffff; /* Brighter white for the mirror effect */
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(245, 222, 179, 0.4);
+    transform: scale(1.1) translateY(-2px); /* Subtle lift */
+    filter: brightness(1.5);
+}
+
+/* --- IMAGE STYLES --- */
+.philosophy-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.image-reveal-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    height: 600px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(1, 50, 32, 0.3);
+}
+
+.image-reveal-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.5s ease;
+}
+
+/* --- MOBILE --- */
+@media (max-width: 900px) {
+    .philosophy-container {
+        flex-direction: column-reverse;
+        gap: 40px;
+        padding: 0;
+    }
+    .glass-card {
+        padding: 40px 25px;
+        width: 100%;
+    }
+    .statement-title { font-size: 2.2rem; }
+}
+
+.experience-section {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.parallax-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%; /* Extra height for scroll movement */
+    object-fit: cover; /* Crucial: fills the space without stretching */
+    filter: brightness(0.35) saturate(0.9); /* Darkens video to make Wheat text readable */
+    will-change: transform;
+}
+
+/* Ensure the wrapper clips the oversized video */
+.parallax-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Re-applying the vignette for a "cinematic" focus */
+.parallax-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle, 
+        transparent 10%, 
+        rgba(1, 50, 32, 0.5) 100%
+    );
+    z-index: 2; /* Sits on top of the video but under the text */
+}
+
+.experience-content {
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    max-width: 800px;
+}
+
+.experience-glass {
+    padding: 60px;
+    background: rgba(245, 222, 179, 0.05); /* Very subtle wheat glass */
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(245, 222, 179, 0.1);
+    text-align: center;
+}
+
+.collections-section {
+    padding: 100px 8% 150px;
+    background: linear-gradient(360deg, #013220, rgba(1, 42, 27, 0.4));
+    color: #F5DEB3;
+}
+
+.collections-grid {
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+    padding-bottom: 40px;
+    /* Hide scrollbar for Chrome/Safari */
+    scrollbar-width: none; 
+}
+
+.collections-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.collection-card {
+    position: relative;
+    flex: 0 0 400px; /* Fixed width for horizontal scroll feel */
+    height: 550px;
+    overflow: hidden;
+    cursor: pointer;
+    background: rgba(1, 42, 27, 0.35);
+}
+
+.cat-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+/* --- THE DIM OVERLAY --- */
+.cat-overlay {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(15px); /* Dims the art */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    backdrop-filter: blur(4px);
+}
+
+.cat-content {
+    text-align: center;
+    transform: translateY(30px);
+    transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+/* --- REVEAL ON HOVER --- */
+.collection-card:hover .cat-overlay {
+    opacity: 1;
+}
+
+.collection-card:hover .cat-content {
+    transform: translateY(0);
+}
+
+.collection-card:hover .cat-img {
+    transform: scale(1.1);
+}
+
+/* --- TYPOGRAPHY & BUTTON --- */
+.cat-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+}
+
+.cat-content p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+.explore-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border: 1px solid #F5DEB3;
+    color: #F5DEB3;
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+}
+
+.explore-btn:hover {
+    background: #F5DEB3;
+    color: #013220;
+}
+
+/* --- MOBILE --- */
+@media (max-width: 768px) {
+    .collection-card {
+        flex: 0 0 85%; /* Shows a peek of the next card */
+        height: 450px;
+    }
+}
+
+.testimonials-section {
+    padding:0;
+    background-color: #013220; /* Forest Green */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40vh;
+}
+
+.testimonials-wrapper {
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.testimonial-slider {
+    position: relative;
+    height: 200px; /* Ensure space for the largest quote */
+}
+
+.testimonial-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(20px);
+}
+
+.testimonial-item.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.collector-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    color: #F5DEB3; /* Wheat */
+    line-height: 1.4;
+    margin-bottom: 4px;
+    font-weight: 300;
+    font-style: italic;
+}
+
+.collector-name {
+    display: block;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #F5DEB3;
+    opacity: 0.6;
+}
+
+/* --- THE DOTS --- */
+.slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 6px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #F5DEB3;
+    opacity: 0.2;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.dot.active {
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+/* --- MOBILE --- */
+@media (max-width: 768px) {
+    .collector-quote {
+        font-size: 1.8rem;
+    }
+    .testimonials-section {
+        padding: 100px 5%;
+    }
+}
+
+.luxury-footer {
+    background: #012a1b;
+    color: #F5DEB3;
+    padding: 120px 8% 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- REVEAL ANIMATIONS --- */
+.reveal-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    overflow: hidden;
+    margin: 0;
+}
+
+.reveal-text span {
+    display: block;
+    transform: translateY(100%);
+    transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.luxury-footer.is-in-view .reveal-text span {
+    transform: translateY(0);
+}
+
+/* --- MAGNETIC BUTTON --- */
+.mag-button {
+    position: relative;
+    display: inline-flex;
+    padding: 20px 40px;
+    margin-top: 40px;
+    border: 1px solid #F5DEB3;
+    color: #F5DEB3;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    overflow: hidden;
+    transition: color 0.4s ease;
+}
+
+.btn-blob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: #F5DEB3;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+    z-index: -1;
+}
+
+.mag-button:hover { color: #012a1b; }
+.mag-button:hover .btn-blob { width: 300px; height: 300px; }
+
+/* --- UNDERLINE HOVER --- */
+.hover-underline {
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.hover-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #F5DEB3;
+    transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.hover-underline:hover { opacity: 1; }
+.hover-underline:hover::after { width: 100%; }
+
+/* --- FOOTER LAYOUT --- */
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 100px;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 80px;
+}
+
+.nav-label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 30px;
+    opacity: 0.4;
+}
+
+.nav-links { list-style: none; padding: 0; }
+.nav-links li { margin-bottom: 15px; }
+
+@media (max-width: 900px) {
+    .footer-main { flex-direction: column; gap: 60px; }
+    .footer-nav { width: 100%; justify-content: space-between; }
+}
+
+/* --- NAVIGATION --- */
+.main-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 20px 0;
+    z-index: 2000;
+    transition: 0.4s;
+}
+
+.nav-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #F5DEB3;
+}
+
+.desktop-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+}
+
+.desktop-links a {
+    text-decoration: none;
+    color: rgba(245, 222, 179, 0.6);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 2px;
+    transition: 0.3s;
+}
+
+.desktop-links a:hover { color: #F5DEB3; }
+
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 3000;
+}
+
+.bar {
+    width: 25px;
+    height: 1px;
+    background: #F5DEB3;
+    transition: 0.4s;
+}
+
+/* --- MOBILE SIDEBAR --- */
+.mobile-sidebar {
+    position: fixed;
+    top: 0;
+    right: -50%;
+    width: 50%;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+    background: rgba(1, 50, 32, 0.18); /* Forest Green Mobile Menu */
+    backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(245, 222, 179, 0.7);
+    z-index: 2500;
+    display: flex;
+    flex-direction: column;
+    padding: 100px 40px;
+    transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.mobile-sidebar.open {
+    right: 0;
+}
+
+.nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 2400;
+    transition: 0.4s;
+}
+
+.nav-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+}
+
+.mobile-links a {
+    text-decoration: none;
+    color: #F5DEB3;
+    font-size: 1.5rem;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    font-size: 10px;
+    color: rgba(245, 222, 179, 0.4);
+    letter-spacing: 2px;
+}
+
+body.no-scroll {
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .desktop-links { display: none; }
+    .menu-toggle { display: flex; }
+}
+
+.social-container { display: flex; gap: 20px; justify-content: center; padding: 30px; }
+.social-item { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-decoration: none; }
+.social-item svg { width: 30px; height: 30px; fill: wheat; transition: fill 0.3s ease; }
+.social-item:hover { background: forestgreen; 
+transform: translateY(-5px); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); }
+.social-item:hover svg { fill: whitesmoke; }
+</style>
+</head>
+
+<body>
+<header class="main-nav">
+    <div class="nav-container">
+        <div class="nav-logo"></div>
+        
+        <ul class="desktop-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="collection.html">Collection</a></li>
+            <li><a href="contacts.html">Contacts</a></li>
+        </ul>
+
+        <div class="menu-toggle" id="menuToggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+</header>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<nav class="mobile-sidebar" id="mobileSidebar">
+    <ul class="mobile-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="collection.html">Collection</a></li>
+        <li><a href="contacts.html">Contacts</a></li>
+    </ul>
+    <div class="sidebar-footer">© 2026 ARCHITECT</div>
+</nav>
+
+<section class="visual-hero">
+    <div class="intro-container" id="introContainer">
+        <div class="logo-wrapper">
+            <div class="logo-text" id="logoText"></div>
+            <div class="underline" id="logoUnderline"></div>
+        </div>
+    </div>
+    <div class="hero-title-wrapper">
+        <h1 class="hero-title title-back">Artistic</h1>
+        
+        <div class="central-artwork">
+            <div class="glass-orb"></div>
+        </div>
+
+        <h1 class="hero-title title-front">Desire</h1>
+    </div>
+
+    <div class="hero-text-content" id="heroTextContent">
+        <h2 class="highlight-text">Feel the Art, Live the Moment</h2>
+        <p class="subtext">
+            Discover paintings, bead work, and pencil creations that awaken emotion, <br>
+            capture imagination, and stay with you long after the gaze.
+        </p>
+    </div>
+
+    <div class="explore-more" id="exploreMore">
+        <span>EXPLORE MORE</span>
+        <div class="inverted-chevron"></div>
+    </div>
+</section>
+
+<section class="signature-section">
+    <div class="section-header">
+        <h2 class="section-title">Signature Works</h2>
+    </div>
+
+    <div class="signature-grid">
+        <div class="grid-item item-a">
+            <div class="art-card">
+                <div class="art-image-container">
+                    <img src="i4.jpg" alt="Beadwork">
+                    <div class="hover-overlay">
+                        <div class="reveal-content">
+                            <h3 class="art-title">Patriotic Kenyan</h3>
+                            <div class="art-details">World most famous Bracelet</div>
+                            <div class="hover-description">
+                                <p>Hand-stitched with over 1,000 micro-glass beads, Custom made.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-item item-b">
+            <div class="art-card">
+                <div class="art-image-container">
+                    <img src="image4.jpg" alt="Pencil Art">
+                    <div class="hover-overlay">
+                        <div class="reveal-content">
+                            <h3 class="art-title">The Pride of Africa</h3>
+                            <div class="art-details">Pencil on Paper • 2025</div>
+                            <div class="hover-description">
+                                <p>A deep dive into bravery, strength and power. All in one piece</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-item item-c">
+            <div class="art-card">
+                <div class="art-image-container">
+                    <img src="image3.jpg" alt="Painting">
+                    <div class="hover-overlay">
+                        <div class="reveal-content">
+                            <h3 class="art-title">Forest Whispers</h3>
+                            <div class="art-details">Oil on Canvas • 2024</div>
+                            <div class="hover-description">
+                                <p>Explore the beauty of wildlife in just a gaze. Feel the nature</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="philosophy-section" id="philosophy">
+    <div class="philosophy-container">
+        <div class="philosophy-text glass-card" data-aos="fade-up">
+            <span class="section-label">The Vision</span>
+            <h2 class="statement-title glow-text">
+                "My work is not created to be seen… but to be felt."
+            </h2>
+            <p class="philosophy-paragraph glow-text">
+                Every stroke and every bead is a silent conversation between the medium and the soul. 
+                I believe that art should act as a mirror to the viewer's own hidden emotions, 
+                capturing the fleeting moments of imagination that words often fail to describe.
+            </p>
+            <div class="artist-signature">
+                <p class="sig-name glow-text">RAW @stu</p>
+            </div>
+        </div>
+
+        <div class="philosophy-image" data-aos="fade-left">
+            <div class="image-reveal-wrapper">
+                <img src="i5.jpg" alt="The Artist at Work">
+                <div class="image-inner-glow"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="experience-section">
+    <div class="parallax-wrapper">
+        <video 
+            autoplay 
+            muted 
+            loop 
+            playsinline 
+            class="parallax-video"
+            poster="image10.jpg">
+            <source src="/markp/gallery-experience.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="parallax-vignette"></div>
+    </div>
+
+    <div class="experience-content">
+        <div class="experience-glass">
+            <h2 class="experience-title">
+                "This is not a gallery. <br> 
+                <span class="italic-highlight">It's a private encounter.</span>"
+            </h2>
+            <p class="experience-subline">EXPERIENCE THE RAW ESSENCE OF CREATION</p>
+        </div>
+    </div>
+</section>
+
+<section class="collections-section" id="collections">
+    <div class="section-header">
+        <h2 class="section-title">The Collections</h2>
+    </div>
+
+    <div class="collections-grid">
+        <div class="collection-card">
+            <img src="image3.jpg" alt="Paintings Collection" class="cat-img">
+            <div class="cat-overlay">
+                <div class="cat-content">
+                    <h3>Paintings</h3>
+                    <p>Pigments meeting linen in a dance of light and shadow. A journey through layered depth.</p>
+                    <a href="collection.html" class="explore-btn">Explore Collection</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="collection-card">
+            <img src="image20.jpg" alt="Beadwork Collection" class="cat-img">
+            <div class="cat-overlay">
+                <div class="cat-content">
+                    <h3>Bead Work</h3>
+                    <p>Tens of thousands of micro-glass beads, hand-woven into intricate geometric narratives.</p>
+                    <a href="collection.html" class="explore-btn">Explore Collection</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="collection-card">
+            <img src="image2.jpg" alt="Pencil Art Collection" class="cat-img">
+            <div class="cat-overlay">
+                <div class="cat-content">
+                    <h3>Pencil Art</h3>
+                    <p>The raw power of graphite. Capturing the soul using nothing but the pressure of a hand.</p>
+                    <a href="collection.html" class="explore-btn">Explore Collection</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials-section">
+    <div class="testimonials-wrapper">
+        <div class="testimonial-slider">
+            <div class="testimonial-item active">
+                <blockquote class="collector-quote">
+                    "Mark's work doesn't just sit on a wall; it changes the energy of the room. The beadwork is a feat of patience and soul."
+                </blockquote>
+                <cite class="collector-name">— Elena Rossi, Private Collector</cite>
+            </div>
+
+            <div class="testimonial-item">
+                <blockquote class="collector-quote">
+                    "There is a profound silence in his pencil art that I haven't found elsewhere. It is hyper-realism with a heartbeat."
+                </blockquote>
+                <cite class="collector-name">— Julian v.H., Berlin Gallery</cite>
+            </div>
+
+            <div class="testimonial-item">
+                <blockquote class="collector-quote">
+                    "Owning a 'Signature' piece felt like a private encounter with the artist's own philosophy. Truly immersive."
+                </blockquote>
+                <cite class="collector-name">— Sarah Jenkins, Interior Architect</cite>
+            </div>
+        </div>
+
+        <div class="slider-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+</section>
+
+<footer class="luxury-footer">
+    <div class="footer-main">
+        <div class="footer-intro">
+            <h2 class="reveal-text">Comprehensive solutions</h2>
+            <h2 class="reveal-text italic-accent">built with heart.</h2>
+            <p class="fade-in-text">Awakening emotion through beadwork, oil, and graphite.</p>
+            <a href="contacts.html" class="mag-button">
+                <span class="btn-text">Start a Commission</span>
+                <div class="btn-blob"></div>
+            </a>
+        </div>
+
+        <div class="footer-nav">
+            <div class="nav-col">
+            </div>
+            <div class="nav-col">
+                <span class="nav-label">Studio</span>
+                <ul class="nav-links">
+                    <li><a href="about.html" class="hover-underline">The Process</a></li>
+                    <li><a href="collection.html" class="hover-underline">Exhibitions</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="bottom-wrap">
+            <div class="social-container">
+                <a href="https://www.facebook.com/share/1DqRgCTSbQ/" target="_blank" class="social-item">
+                    <svg viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978 1.602 0 2.44.119 2.84.173v3.416h-2.051c-1.423 0-1.696.675-1.696 1.666v2.303h3.726l-.571 3.667h-3.155v7.98h-4.95z"/></svg>
+                </a>
+
+                <a href="https://wa.me/254712745650?text=Hello%20Raw%@Studio%20,%20I%20would%20like%20to%20inquire%20about%20your%20services." target="_blank" class="social-item">
+                    <svg viewBox="0 0 500 500">
+                        <path d="M250 80C156.1 80 80 156.1 80 250C80 283.4 89.7 314.5 106.3 340.8L80 420L161.7 398.6C187.3 412.3 217.5 420 250 420C343.9 420 420 343.9 420 250C420 156.1 343.9 80 250 80Z"/>
+                        <path d="M331.1 298.5C327.3 296.6 308.5 287.3 305 286C301.5 284.7 299 284.1 296.5 287.9C294 291.7 286.9 300.3 284.7 302.8C282.5 305.3 280.3 305.6 276.5 303.7C272.7 301.8 260.5 297.8 246.1 284.9C234.9 274.9 227.3 262.5 225.1 258.7C222.9 254.9 224.9 252.8 226.8 250.9C228.5 249.2 230.6 246.4 232.5 244.2C234.4 242 235 240.4 236.3 237.9C237.6 235.4 236.9 233.2 236 231.3C235.1 229.4 227.6 210.9 224.5 203.4C221.4 196.1 218.3 197.1 216 197C213.8 196.9 211.3 196.9 208.8 196.9C206.3 196.9 202.2 197.8 198.7 201.6C195.2 205.4 185.3 214.7 185.3 233.8C185.3 252.9 199.2 271.3 201.1 273.9C203 276.5 228.4 315.8 267.3 332.6C276.5 336.6 283.8 339.1 289.4 340.9C298.7 343.8 307.2 343.4 313.9 342.4C321.4 341.3 337 332.9 340.3 323.7C343.6 314.5 343.6 306.6 342.6 304.9C341.6 303.1 339.1 302.1 335.3 300.2L331.1 298.5Z" fill="pink"/>
+                    </svg>
+                </a>
+            </div>
+            <p class="copyright">© 2026 RAW @STUDIO</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+const cards = document.querySelectorAll('.card');
+let locked = new Array(cards.length).fill(false);
+let lastScroll = window.scrollY;
+
+function animate(){
+  const vh = window.innerHeight;
+  let currentScroll = window.scrollY;
+  let scrollingDown = currentScroll > lastScroll;
+  let scrollingUp = currentScroll < lastScroll;
+  lastScroll = currentScroll;
+
+  cards.forEach((card,index)=>{
+    const rect = card.getBoundingClientRect();
+    const center = vh / 2;
+    let distance = Math.abs(center - rect.top - rect.height/2);
+    let progress = Math.min(distance / vh, 1);
+    let reveal = 1 - progress;
+
+    if(scrollingUp && reveal < 0.9){
+      locked[index] = false;
+    }
+
+    if(locked[index]){
+      card.style.transform = "rotateY(0deg) scale(1)";
+      card.style.opacity = 1;
+      return;
+    }
+
+    let rotate = 360 * Math.pow(progress, 1.5);
+    let scale = 0.3 + (0.7 * reveal);
+    let opacity = reveal;
+
+    card.style.transform = `rotateY(${rotate}deg) scale(${scale})`;
+    card.style.opacity = opacity;
+
+    if(reveal > 0.98 && scrollingDown){
+      locked[index] = true;
+      card.style.transform = "rotateY(0deg) scale(1)";
+      card.style.opacity = 1;
+    }
+  });
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener('load', () => {
+  const intro = document.getElementById('introContainer');
+  const underline = document.getElementById('logoUnderline');
+  const textElement = document.getElementById('logoText');
+  const textToType = "RAW @STU";
+  let charIndex = 0;
+
+  function typeWriter() {
+    if (charIndex < textToType.length) {
+      textElement.innerHTML += textToType.charAt(charIndex);
+      charIndex++;
+      setTimeout(typeWriter, 100);
+    } else {
+      setTimeout(() => {
+        underline.classList.add('draw');
+        setTimeout(() => {
+          intro.classList.add('shrunk');
+        }, 800);
+      }, 300);
+    }
+  }
+  typeWriter();
+});
+
+// ===== NEW: Hero Text Content Scroll Animation =====
+window.addEventListener('scroll', () => {
+  const heroTextContent = document.getElementById('heroTextContent');
+  const exploreMore = document.getElementById('exploreMore');
+  const hero = document.querySelector('.visual-hero');
+  
+  if (!heroTextContent || !hero) return;
+  
+  const heroRect = hero.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const heroCenter = heroRect.top + heroRect.height / 2;
+  const viewportCenter = viewportHeight / 2;
+  
+  // Calculate distance from viewport center to hero element center
+  const distance = Math.abs(viewportCenter - heroCenter);
+  const triggerDistance = viewportHeight * 0.3; // Trigger when within 30% of viewport
+  
+  if (distance < triggerDistance) {
+    heroTextContent.classList.add('animate-in');
+    exploreMore.classList.add('animate-in');
+  } else {
+    heroTextContent.classList.remove('animate-in');
+    exploreMore.classList.remove('animate-in');
+  }
+});
+
+const menuToggle = document.getElementById('menuToggle');
+const mobileSidebar = document.getElementById('mobileSidebar');
+const navOverlay = document.getElementById('navOverlay');
+const body = document.body;
+
+function toggleMenu() {
+    mobileSidebar.classList.toggle('open');
+    navOverlay.classList.toggle('visible');
+    body.classList.toggle('no-scroll');
+}
+
+function closeMenu() {
+    mobileSidebar.classList.remove('open');
+    navOverlay.classList.remove('visible');
+    body.classList.remove('no-scroll');
+}
+
+menuToggle.addEventListener('click', toggleMenu);
+navOverlay.addEventListener('click', closeMenu);
+
+window.addEventListener('scroll', () => {
+    const nav = document.querySelector('.main-nav');
+    if (window.scrollY > 50) {
+        nav.style.background = "rgba(1, 50, 32, 0.1)";
+        nav.style.backdropFilter = "blur(0px)";
+        nav.style.padding = "15px 0";
+    } else {
+        nav.style.background = "transparent";
+        nav.style.backdropFilter = "none";
+        nav.style.padding = "20px 0";
+    }
+});
+
+// Automatically wrap every word in a span for the glow effect
+const glowContainers = document.querySelectorAll('.glow-text');
+glowContainers.forEach(container => {
+    const text = container.innerText;
+    container.innerHTML = text.split(' ').map(word => `<span>${word}</span>`).join(' ');
+});
+
+window.addEventListener('scroll', () => {
+    const section = document.querySelector('.experience-section');
+    const video = document.querySelector('.parallax-video');
+    const glass = document.querySelector('.experience-glass');
+    
+    if (!section || !video) return;
+
+    const sectionRect = section.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+
+    // Calculate progress (0 when section enters, 1 when it leaves)
+    if (sectionRect.top < viewportHeight && sectionRect.bottom > 0) {
+        const scrollPercent = sectionRect.top / viewportHeight;
+
+        // Slow Motion Video Movement
+        video.style.transform = `translateY(${scrollPercent * 80}px) scale(1.1)`;
+        
+        // The glass card drifts in the opposite direction for 3D depth
+        glass.style.transform = `translateY(${scrollPercent * -40}px)`;
+    }
+});
+
+const slides = document.querySelectorAll('.testimonial-item');
+const dots = document.querySelectorAll('.dot');
+let currentSlide = 0;
+
+function showSlide(index) {
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+    
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+}
+
+function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+}
+
+// Auto-play interval
+setInterval(nextSlide, 6000);
+
+// Text Reveal on Scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting) {
+            entry.target.classList.add('is-in-view');
+        }
+    });
+}, { threshold: 0.2 });
+
+observer.observe(document.querySelector('.luxury-footer'));
+
+// Wrap words for reveal
+document.querySelectorAll('.reveal-text').forEach(text => {
+    const content = text.innerHTML;
+    text.innerHTML = `<span>${content}</span>`;
+});
+
+// Magnetic Interaction for Socials
+const magnets = document.querySelectorAll('.magnetic-item');
+
+magnets.forEach((link) => {
+    link.addEventListener('mousemove', (e) => {
+        const bound = link.getBoundingClientRect();
+        const x = e.clientX - bound.left - bound.width / 2;
+        const y = e.clientY - bound.top - bound.height / 2;
+        
+        link.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
+        link.style.opacity = "1";
+    });
+
+    link.addEventListener('mouseleave', () => {
+        link.style.transform = `translate(0px, 0px)`;
+        link.style.opacity = "0.6";
+    });
+});
+</script>
+</body>
+</html>

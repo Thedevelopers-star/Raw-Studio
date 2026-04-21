@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAW @STUDIO | Collection</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest: #013220;
+            --wheat: #F5DEB3;
+            --deep: #000;
+            --glass: rgba(245, 222, 179, 0.1);
+            --ease: cubic-bezier(0.77, 0, 0.175, 1);
+            --transition: all 0.3s var(--ease);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body { background-color:wheat; color: var(--wheat); overflow-x: hidden; }
+        body.no-scroll { overflow: hidden; }
+
+/* NAV */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 25px 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:  rgba(1,50,32,0.9);
+    z-index: 1000;
+}
+
+.logo-center {
+    letter-spacing: 10px;
+    font-size: 1.4rem;
+    border-bottom: 1px solid rgba(245,222,179,0.3);
+    padding-bottom: 6px;
+    text-decoration: none;
+    color: var(--wheat);
+    transition: 0.4s;
+    text-transform: uppercase;
+}
+
+.menu-trigger {
+    position: absolute;
+    right: 5%;
+    cursor: pointer;
+    width: 30px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    z-index: 2000; /* Above overlay */
+}
+
+.hamburger, .hamburger::before, .hamburger::after {
+    width: 30px; height: 1px; background: var(--wheat);
+    position: absolute; transition: 0.4s;
+}
+.hamburger::before { content: ''; top: -8px; }
+.hamburger::after { content: ''; top: 8px; }
+
+/* HAMBURGER ANIMATION */
+body.menu-open .hamburger { background: transparent; }
+body.menu-open .hamburger::before { transform: rotate(45deg); top: 0; }
+body.menu-open .hamburger::after { transform: rotate(-45deg); top: 0; }
+
+/* NAVIGATION DRAWER */
+.side-menu-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    opacity: 0; visibility: hidden;
+    transition: 0.5s; z-index: 1500;
+}
+.side-menu {
+    position: fixed; top: 0; 
+    right: -60%; /* Start off-screen */
+    width: 60%;  /* Fixed 60% width for all devices */
+    height: 100%;
+    background: var(--forest);
+    padding: 10% 8%; 
+    display: flex; flex-direction: column;
+    justify-content: center; 
+    z-index: 1600;
+    transition: var(--transition);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+}
+
+body.menu-open .side-menu { right: 0; }
+body.menu-open .side-menu-overlay { opacity: 1; visibility: visible; }
+
+.menu-links a {
+    font-size: clamp(1.5rem, 4vw, 3rem); 
+    margin: 15px 0;
+    text-decoration: none; color: var(--wheat);
+    opacity: 0.4; transition: 0.4s; display: block;
+    font-family: 'Playfair Display', serif;
+}
+.menu-links a:hover { opacity: 1; transform: translateX(15px); }
+
+
+        /* Nav Right: Bag (Flex: 1 to push logo) */
+        .nav-right { flex: 1; display: flex;
+        justify-content: flex-end; 
+        }
+        .bag-trigger { 
+            background: none; border: 1px solid var(--wheat); padding: 10px 20px;
+            cursor: pointer; color: var(--wheat); letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .cart-count-badge { background: var(--wheat); color: var(--forest); padding: 2px 8px; border-radius: 50%; font-size: 0.7rem; font-weight: bold; }
+
+        /* --- FILTER SECTION --- */
+        .filter-section {
+            position: sticky;
+            background: var(--forest);
+            backdrop-filter: blur(15px);
+            top: 9%;
+            margin-top: 150px; text-align: center; padding: 0 5%;
+            z-index: 1000;
+        }
+        .filter-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 40px; }
+        .filter-btn {
+            background: transparent; border: 1px solid var(--wheat); color: var(--wheat);
+            padding: 10px 25px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
+            font-size: 0.7rem; transition: var(--transition);
+        }
+        .filter-btn.active, .filter-btn:hover { background: var(--wheat); color: var(--forest); font-weight: bold;}
+
+        /* --- SHOP GRID --- */
+        .shop-container { max-width: 1500px; margin: 0 auto 120px auto; padding: 0 5%; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; }
+        .product-card { background: var(--forest); border: 1px solid var(--wheat); padding: 20px; transition: var(--transition); display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
+        .product-card img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 25px; filter: grayscale(15%); }
+        .product-name { font-size: 1.1rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; font-weight: 400; flex-grow: 1;}
+        .product-price { color: var(--wheat); font-weight: bold; font-size: 1.2rem; display: block; margin-bottom: 20px; }
+
+        .btn-wheat {
+            width: 100%; padding: 14px; background: transparent; color: var(--wheat); border: 1px solid var(--wheat);
+
+            text-transform: uppercase; letter-spacing: 2.5px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 0.8rem;
+        }
+        .btn-wheat:hover { background: var(--wheat); color: var(--forest); }
+
+        /* --- CART OVERLAY (RIGHT) --- */
+        .cart-overlay {
+            position: fixed; top: 0; right: 0; width: 480px; height: 100vh;
+            background: var(--forest); z-index: 2800; transform: translateX(100%);
+            transition: transform 0.5s var(--ease); display: flex; flex-direction: column; padding: 50px;
+            border-left: 2px solid var(--wheat);
+        }
+        .cart-overlay.active { transform: translateX(0); }
+        .cart-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 2700; opacity: 0; visibility: hidden; transition: 0.5s; }
+        .cart-backdrop.active { opacity: 1; visibility: visible; }
+        .cart-items-list { flex-grow: 1; overflow-y: auto; margin: 30px 0; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(245,222,179,0.2); padding-bottom: 15px; gap: 15px;}
+        .cart-item p { text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;}
+
+        /* --- MODAL --- */
+        #entry-modal {
+            position: fixed; inset: 0; background: var(--deep); z-index: 5000; display: flex; align-items: center; justify-content: center;
+        }
+        .entry-content {  background: linear-gradient(135deg,  rgba(5,90,2,0.9), rgba(245,222,179,0.5), rgba(245,222,179,0.7));
+        backdrop-filter: blur(10px); border: 2px solid var(--wheat); padding: 50px; width: 100%; max-width: 500px; text-align: center; }
+        .input-group { margin-bottom: 25px; text-align: left; }
+        .input-group label { display: block; font-size: 0.75rem; color: var(--wheat); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px;}
+        .input-group input { width: 100%; padding: 15px; background: var(--glass); border: 1px solid rgba(245,222,179,0.3); color: var(--wheat); outline: none; transition: 0.3s;}
+        .input-group input:focus { border-color: var(--wheat); }
+
+        /* --- RESPONSIVE ADJUSTMENTS --- */
+        @media (max-width: 1024px) {
+            .navbar { height: 120px; flex-direction: column; padding: 15px 5%; justify-content: space-between;}
+            .logo { position: static; transform: none; left: auto; margin: 10px 0; order: -1;}
+            .nav-left, .nav-right { flex: none; width: 100%; justify-content: center;}
+            .nav-links { gap: 20px;}
+            .filter-section { margin-top: 170px; }
+        }
+
+        @media (max-width: 600px) {
+            .cart-overlay { width: 100%; padding: 30px;}
+            .nav-links { flex-wrap: wrap; justify-content: center; font-size: 0.7rem;}
+            .nav-links a { letter-spacing: 1px;}
+            .product-grid { grid-template-columns: 1fr; }
+            .filter-btn { padding: 8px 15px; font-size: 0.65rem;}
+        }
+        .cart-icon {
+    width: 40px;
+    height: 40px;
+    background-color: silver; /* Put the color you want here */
+    
+    /* Make sure this path matches your file name exactly */
+    -webkit-mask-image: url('/markp/shopping-cart-add-svgrepo-com.svg');
+    mask-image: url('/markp/shopping-cart-add-svgrepo-com.svg');
+    
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+}
+    </style>
+</head>
+<body class="no-scroll">
+
+    <div id="entry-modal">
+        <div class="entry-content">
+            <h2 style="letter-spacing: 6px; margin-bottom: 40px; font-weight: 300;">THE STUDIO ENTRY</h2>
+            <form id="entryForm">
+                <div class="input-group"><label>Full Name</label><input type="text" id="e_name" required></div>
+                <div class="input-group"><label>Email</label><input type="email" id="e_email" required></div>
+                <div class="input-group"><label>Phone</label><input type="tel" id="e_phone" required></div>
+                <button type="submit" class="btn-wheat" style="margin-top: 20px;">Enter Collection</button>
+            </form>
+        </div>
+    </div>
+<nav>
+    <div class="nav-right">
+        <button onclick="toggleCart()" class="bag-trigger">
+            BAG <span id="cart-count" class="cart-count-badge">0</span>
+        </button>
+    </div>
+
+    <div class="menu-trigger" id="menuToggle">
+        <div class="hamburger"></div>
+    </div> 
+</nav>
+
+
+
+<div class="side-menu-overlay" id="overlay"></div>
+<div class="side-menu" id="sideMenu">
+    <div class="menu-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="collection.html">Collection</a>
+        <a href="contacts.html">Contact</a>
+    </div>
+</div>
+     
+
+
+    <section class="filter-section">
+        <div class="filter-group">
+            <button class="filter-btn active" onclick="filterProducts('All', this)">All</button>
+            <button class="filter-btn" onclick="filterProducts('Pencil Art', this)">Pencil Art</button>
+            <button class="filter-btn" onclick="filterProducts('Bead Work', this)">Bead Work</button>
+            <button class="filter-btn" onclick="filterProducts('Painting', this)">Painting</button>
+            <button class="filter-btn" onclick="filterProducts('Custom Car Art', this)">Custom Cars</button>
+        </div>
+    </section>
+
+    <main class="shop-container">
+        <div class="product-grid" id="productGrid"></div>
+    </main>
+
+    <div class="cart-backdrop" id="cartBackdrop" onclick="toggleCart()"></div>
+    <aside class="cart-overlay" id="cartOverlay">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid rgba(245,222,179,0.3); padding-bottom: 15px;">
+            <h2 style="letter-spacing:5px; font-weight: 300;">YOUR SELECTION</h2>
+            <button onclick="toggleCart()" style="background:none; border:none; color:var(--wheat); font-size:2.5rem; cursor:pointer; line-height: 1;">&times;</button>
+        </div>
+        
+        <div class="cart-items-list" id="cartItemsList"></div>
+        
+        <div style="border-top: 1px solid var(--wheat); padding-top: 30px; margin-top: auto;">
+            <div style="display:flex; justify-content:space-between; font-size:1.3rem; margin-bottom:25px; letter-spacing: 1px;">
+                <span>TOTAL</span><span id="cartTotal" style="font-weight: bold;">Kes0.00</span>
+            </div>
+            <button class="btn-wheat" id="orderBtn" onclick="sendOrder()">Complete Purchase</button>
+        </div>
+    </aside>
+
+    <script>
+        // --- EMAILJS CONFIGURATION ---
+        (function() {
+            // Replace with your actual EmailJS Public Key
+            emailjs.init("sTKqDw5NoXS7GD7DN"); 
+        })();
+
+        let userData = { name: '', email: '', phone: '' };
+        let cart = [];
+
+        // --- GENERATE PRODUCTS (40+) ---
+        const categories = ["Pencil Art", "Bead Work", "Painting", "Custom Car Art"];
+                // --- PRODUCT DATABASE (48 ITEMS) ---
+        // Edit the name, category, price, and img for each item below.
+        const products = [
+            { id: 1, name: "The Lion Roar", category: "Pencil Art", price: 2500, img: "image4.jpg" },
+            { id: 2, name: "Customer 254", category: "Bead Work", price: 700, img: "i4.jpg" },
+            { id: 3, name: "Forests Whispers", category: "Painting", price: 3000, img: "image3.jpg" },
+            { id: 4, name: " Full body Car painting(negotiable)", category: "Custom Car Art", price: 30000, img: "image17.jpg" },
+            { id: 5, name: "Zebra", category: "Pencil Art", price: 3500, img: "image5.jpg" },
+            { id: 6, name: "Custom Bracelet", category: "Bead Work", price: 300, img: "image20.jpg" },
+            { id: 7, name: "Rick and Morty", category: "Painting", price: 3500, img: "image15.jpg" },
+            { id: 8, name: "Waters Mimick", category: "Pencil Art", price: 2500, img: "image2.jpg" },
+            { id: 9, name: "Custom Necklace", category: "Bead Work", price: 1500, img: "image19.jpg" },
+            { id: 10, name: " The Clip", category: "Painting", price:4000 , img: "image14.jpg" },
+            { id: 11, name: "Custom Paint Job", category: "Custom Car Art", price: 7000, img: "image22.jpg" },
+            { id: 12, name: "Timber (III)", category: "Pencil Art", price: 5000, img: "image6.jpg" },
+            { id: 13, name: "Custom Emoji and Pattern", category: "Bead Work", price: 300, img: "image23.jpg" },
+            { id: 14, name: "Damaged Retouch Paint(negotiable)", category: "Custom Car Art", price: 6000, img: "image28.jpg" },
+            { id: 15, name: "Custom one love", category: "Pencil Art", price: 5000, img: "image.jpg" },
+            { id: 16, name: "Product Customisation", category: "Bead Work", price: 2800, img: "image24.jpg" },
+            { id: 17, name: "Culture and Heritage", category: "Painting", price: 5000, img: "image29.jpg" },
+            { id: 18, name: "Custom True colours", category: "Bead Work", price: 1000, img: "image21.jpg" },
+            { id: 19, name: "Customer colour paint", category: "Painting", price: 5000, img: "image27.jpg" },
+            { id: 20, name: "The Old Man", category: "Pencil Art", price: 4000, img: "image12.jpg" },
+            { id: 21, name: "Clothes Customisation", category: "Bead Work", price: 1000, img: "image25.jpg" },
+            { id: 22, name: "Leopard", category: "Pencil Art", price: 3500, img: "image31.jpg" },
+            { id: 23, name: "Le Shark", category: "Pencil Art", price: 5000, img: "image13.jpg" },
+            { id: 24, name: "Bead Work", category: "Bead Work", price: 1500, img: "image30.jpg" },
+            { id: 25, name: "Legendary Tupac", category: "Pencil Art", price: 3500, img: "image16.jpg" },
+            { id: 26, name: "Long Bracelet", category: "Bead Work", price: 1500, img: "image32.jpg" }];
+
+        // --- RENDER & FILTER ---
+        function renderProducts(filteredList) {
+            const grid = document.getElementById('productGrid');
+            if (filteredList.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 50px; opacity:0.5;">No works found in this category.</div>';
+                return;
+            }
+            grid.innerHTML = filteredList.map(p => `
+                <div class="product-card">
+                    <img src="${p.img}" alt="${p.name}">
+                    <div class="product-name">${p.name}</div>
+                    <span class="product-price">Kes${p.price.toFixed(2)}</span>
+<button id="btn-${p.id}" class="btn-wheat" onclick="addToCart(${p.id})">ADD TO CART<div class="cart-con"></div></button>
+
+                </div>
+            `).join('');
+        }
+
+        function filterProducts(cat, btn) {
+            // Update active state of buttons
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Filter products array
+            const list = cat === 'All' ? products : products.filter(p => p.category === cat);
+            renderProducts(list);
+        }
+
+        // --- ENTRY MODAL LOGIC ---
+        document.getElementById('entryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Capture client details
+            userData.name = document.getElementById('e_name').value;
+            userData.email = document.getElementById('e_email').value;
+            userData.phone = document.getElementById('e_phone').value;
+            
+            // Hide modal and restore scrolling
+            document.getElementById('entry-modal').style.display = 'none';
+            document.body.classList.remove('no-scroll');
+        });
+
+        // --- CART LOGIC ---
+        function addToCart(id) {
+    // 1. Check if the product is already in the cart
+    const alreadyInCart = cart.find(item => item.id === id);
+    
+    if (!alreadyInCart) {
+        // 2. Add to cart array
+        const product = products.find(p => p.id === id);
+        cart.push(product);
+        updateCartUI();
+        
+        // 3. Find the specific button and disable it
+        const btn = document.getElementById(`btn-${id}`);
+        if (btn) {
+            btn.innerHTML = "ADDED TO BAG";
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+            btn.style.cursor = "not-allowed";
+            btn.style.background = "var(--wheat)";
+            btn.style.color = "var(--forest)";
+        }
+    }
+}
+
+        function removeFromCart(index) {
+    // Get the ID of the item being removed before splicing it out
+    const removedItem = cart[index];
+    
+    cart.splice(index, 1);
+    updateCartUI();
+    
+    // Re-enable the button for this specific item
+    const btn = document.getElementById(`btn-${removedItem.id}`);
+    if (btn) {
+        btn.innerText = "ADD TO BAG";
+        btn.disabled = false;
+        btn.style.opacity = "1";
+        btn.style.cursor = "pointer";
+        btn.style.background = "transparent";
+        btn.style.color = "var(--wheat)";
+    }
+}
+
+
+        function updateCartUI() {
+            // Update badge count
+            document.getElementById('cart-count').innerText = cart.length;
+            
+            let total = 0;
+            const list = document.getElementById('cartItemsList');
+            
+            if (cart.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding-top:40px; opacity:0.5; font-size:0.9rem;">Your selection is empty.</div>';
+            } else {
+                list.innerHTML = cart.map((item, index) => {
+                    total += item.price;
+                    return `
+                        <div class="cart-item">
+                            <div>
+                                <p>${item.name}</p>
+                                <span style="color:rgba(245,222,179,0.6); font-size:0.8rem;">Kes${item.price.toFixed(2)}</span>
+                            </div>
+                            <button onclick="removeFromCart(${index})" style="background:none; border:none; color:var(--wheat); cursor:pointer; font-size:1.2rem; opacity:0.5;">&times;</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Update total display
+            document.getElementById('cartTotal').innerText = `Kes${total.toFixed(2)}`;
+        }
+
+        function toggleCart() {
+            const isOpen = document.getElementById('cartOverlay').classList.toggle('active');
+            document.getElementById('cartBackdrop').classList.toggle('active');
+            
+            // Lock body scrolling when cart is open
+            document.body.classList.toggle('no-scroll', isOpen);
+        }
+
+// --- EMAILJS ORDER SUBMISSION ---
+        function sendOrder() {
+            if (cart.length === 0) {
+                alert("Your selection is empty.");
+                return;
+            }
+            
+            const btn = document.getElementById('orderBtn');
+            const originalText = btn.innerText;
+            btn.innerText = "SENDING INQUIRY...";
+            btn.disabled = true;
+
+            // Format product list for the email
+            const productList = cart.map(item => `- ${item.name} ($${item.price.toFixed(2)})`).join("\n");
+            const total = document.getElementById('cartTotal').innerText;
+
+            // Variables mapping to your EmailJS Template
+            const templateParams = {
+                user_name: userData.name,
+                user_email: userData.email,
+                user_phone: userData.phone,
+                product_details: productList,
+                total_price: total,
+                order_id: 'RAW-' + Date.now() // Unique inquiry ID
+            };
+
+            // Replace with your actual Service ID and Template ID
+                emailjs.send('service_p2829um', 'template_pcijo08', templateParams)
+                .then(() => {
+                    alert("Thank you for your interest. Your acquisition inquiry has been sent to RAW @STUDIO. We will contact you shortly.");
+                    
+                    // Reset cart and UI
+                    cart = [];
+                    updateCartUI();
+                    toggleCart();
+                    
+                    // Reset button state
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }, (err) => {
+                    alert("Failed to send inquiry. Please check the console for details.");
+                    console.error("EmailJS Error:", err);
+                    
+                    // Reset button state on error
+                    btn.innerText = "TRY AGAIN";
+                    btn.disabled = false;
+                });
+        }
+
+        // --- INITIAL RENDER ---
+        renderProducts(products);
+        // MENU LOGIC
+const menuToggle = document.getElementById('menuToggle');
+const overlay = document.getElementById('overlay');
+const body = document.body;
+
+function openMenu() { body.classList.add('menu-open'); }
+function closeMenu() { body.classList.remove('menu-open'); }
+
+// Toggle on click
+menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    body.classList.contains('menu-open') ? closeMenu() : openMenu();
+});
+
+// Close when clicking outside (overlay)
+overlay.addEventListener('click', closeMenu);
+
+// Close on link click
+document.querySelectorAll('.menu-links a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+});
+
+    
+    </script>
+</body>
+</html>

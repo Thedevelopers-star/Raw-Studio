@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>About | RAW @STUDIO</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --forest: #013220;
+    --deep: #000;
+    --wheat: #F5DEB3;
+    --glass: rgba(255,255,255,0.04);
+    --transition: all 0.8s cubic-bezier(0.19,1,0.22,1);
+}
+
+/* RESET & LAYOUT GUARD */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    background: #000;
+    font-family: 'Inter', sans-serif;
+    color: var(--wheat);
+}
+
+/* LOCK SCROLLING WHEN MENU OPEN */
+body.menu-open { 
+    overflow: hidden !important; 
+    height: 100vh;
+}
+
+/* NAV */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 25px 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:rgba(1,50,32,0.4);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+.logo-center {
+    letter-spacing: 10px;
+    font-size: 1.4rem;
+    border-bottom: 1px solid rgba(245,222,179,0.3);
+    padding-bottom: 6px;
+    text-decoration: none;
+    color: var(--wheat);
+    transition: 0.4s;
+    text-transform: uppercase;
+}
+
+.menu-trigger {
+    position: absolute;
+    right: 5%;
+    cursor: pointer;
+    width: 30px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    z-index: 2000; /* Above overlay */
+}
+
+.hamburger, .hamburger::before, .hamburger::after {
+    width: 30px; height: 1px; background: var(--wheat);
+    position: absolute; transition: 0.4s;
+}
+.hamburger::before { content: ''; top: -8px; }
+.hamburger::after { content: ''; top: 8px; }
+
+/* HAMBURGER ANIMATION */
+body.menu-open .hamburger { background: transparent; }
+body.menu-open .hamburger::before { transform: rotate(45deg); top: 0; }
+body.menu-open .hamburger::after { transform: rotate(-45deg); top: 0; }
+
+/* NAVIGATION DRAWER */
+.side-menu-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    opacity: 0; visibility: hidden;
+    transition: 0.5s; z-index: 1500;
+}
+.side-menu {
+    position: fixed; top: 0; 
+    right: -50%; /* Start off-screen */
+    width: 50%;  /* Fixed 60% width for all devices */
+    height: 100%;
+    background:rgba(1,50,32,0.9);
+    color: wheat;
+    backdrop-filter: blur(10px);
+    padding: 10% 8%; 
+    display: flex; flex-direction: column;
+    justify-content: center; 
+    z-index: 1600;
+    transition: var(--transition);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+}
+
+body.menu-open .side-menu { right: 0; }
+body.menu-open .side-menu-overlay { opacity: 1; visibility: visible; }
+
+.menu-links a {
+    font-size: clamp(1.5rem, 4vw, 3rem); 
+    margin: 15px 0;
+    text-decoration: none; color: wheat ;
+    opacity: 0.4; transition: 0.4s; display: block;
+    font-family: 'Playfair Display', serif;
+}
+.menu-links a:hover { opacity: 1; transform: translateX(15px); }
+
+/* HERO */
+.hero {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image: linear-gradient(12deg,  rgba(1, 50, 32, 0.5),rgba(1, 50, 32, 0.8)), url('image10.jpg');
+  background-size: cover;
+  background-position: center;
+ color: wheat;
+ font-weight: bolder;
+  transform: scale(1.1);
+  transition: transform 2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 1;
+    position: relative;
+    padding: 0 5%;
+}
+.hero-title { font-size: clamp(2.2rem, 7vw, 5rem); margin-bottom: 20px; }
+.scroll-hint {
+    position: absolute; bottom: 40px;
+    letter-spacing: 4px; font-size: 0.7rem; text-transform: uppercase;
+    opacity: 0.6; animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+/* STORY SPLIT */
+.story-split {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--wheat);
+    color: var(--forest);
+}
+.story-image, .story-text { 
+    flex: 1; 
+    padding: 8px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+}
+.story-image img {
+    width: 100%; 
+    height: 80vh; 
+    object-fit: cover;
+    transition: 2s var(--transition);
+}
+.story-text h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 30px; }
+
+
+/* PHILOSOPHY */
+.philosophy-section { padding: 150px 10%; background: linear-gradient(5deg, #013220, wheat); width: 100%; }
+.glass-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.glass-card {
+    background: rgba(1, 50, 32, 0.2); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 50px; transition: var(--transition);
+}
+.glass-card:hover { transform: translateY(-15px); background: rgba(255,255,255,0.08); }
+
+/* SECTIONS ALIGNMENT */
+.process-section, .signature-section {
+    padding: 150px 10%; text-align: center; width: 100%; background: var(--forest);
+}
+.signature-section { border-top: 1px solid rgba(245,222,179,0.1); }
+.signature-quote { font-size: clamp(1.8rem, 5vw, 3.5rem); font-style: italic; max-width: 900px; margin: 0 auto; }
+
+/* STATS */
+.stats {
+    display: flex; justify-content: space-around; padding: 100px 10%;
+    background: linear-gradient(5deg, #000, #013220); background-image: url('/markp/i4.jpg'); /* Use a high-contrast art image */
+    background-size: cover;
+    background-position: center;
+    
+    /* 2. Clipping the background to the text shape */
+    -webkit-background-clip: text; /* For Safari/Chrome */
+    background-clip: text;
+    
+    /* 3. Making the actual text transparent so the background shows through */
+    color: transparent;
+    
+    /* 4. Optional: Adding a slight stroke so the letters are visible against the dark green */
+    -webkit-text-stroke: 1px rgba(245, 222, 179, 0.2); text-align: center; width: 100%;
+}
+.number { font-size: 4rem; display: block; font-family: 'Playfair Display'; }
+
+/* FOOTER */
+.footer { padding: 150px 10%; text-align: center; background: #000; width: 100%; }
+.mag-button {
+    display: inline-block; padding: 20px 50px;
+    border: 1px solid var(--wheat); color: var(--wheat);
+    text-decoration: none; letter-spacing: 3px;
+    position: relative; transition: 0.5s; z-index: 1; overflow: hidden;
+}
+.mag-button:hover { color: var(--forest); }
+.mag-button::before {
+    content: ""; position: absolute; top: 50%; left: 50%; width: 0; height: 0;
+    background: var(--wheat); transition: 0.5s; z-index: -1; transform: translate(-50%,-50%); border-radius: 50%;
+}
+.mag-button:hover::before { width: 400px; height: 400px; }
+
+/* REVEALS */
+.reveal { opacity: 0; transform: translateY(40px); transition: 1.5s cubic-bezier(0.19,1,0.22,1); }
+.reveal.active { opacity: 1; transform: translateY(0); }
+.word-fade span { opacity: 0; display: inline-block; transform: translateY(10px); transition: 0.5s; }
+
+/* MOBILE RESPONSIVENESS */
+@media(max-width: 768px) {
+    .side-menu { width: 85%; right: -85%; } /* Slightly wider on mobile for readability */
+    body.menu-open .side-menu { right: 0; }
+    .story-split { flex-direction: column; }
+    .story-image, .story-text { flex: none; width: 100%; padding: 12% 8%; }
+    .story-image img { height: 60vh; }
+    .glass-grid { grid-template-columns: 1fr; }
+    .mediums { flex-direction: column; height: auto; }
+    .medium-item { height: 400px; width: 100%; }
+    .stats { flex-direction: column; gap: 60px; }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="#" class="logo-center">RAW @STU</a>
+    <div class="menu-trigger" id="menuToggle">
+        <div class="hamburger"></div>
+    </div>
+</nav>
+
+<div class="side-menu-overlay" id="overlay"></div>
+<div class="side-menu" id="sideMenu">
+    <div class="menu-links">
+     <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="collection.html">Collection</a>
+            <a href="contacts.html">Contacts</a>
+  
+    </div>
+</div>
+
+<section class="hero">
+    <div class="reveal">
+        <h1 class="hero-title">Feel the Art, Live the Moment</h1>
+        <p style="letter-spacing:4px; text-transform:uppercase; font-size:0.85rem;">A private exploration of emotion through paint, form, and detail.</p>
+    </div>
+    <div class="scroll-hint">Scroll to enter</div>
+</section>
+
+<section class="story-split">
+    <div class="story-image reveal">
+        <img src="image8.jpg" height="100%" width="100%" alt="The Story">
+    </div>
+    <div class="story-text reveal">
+        <h2>A Private Encounter</h2>
+        <p>My work begins where words fail.<br><br>
+        Each piece is born from a moment—raw, unfiltered, and deeply personal. 
+        Whether on canvas, bead, or structure, I translate emotion into form.<br><br>
+        From fine art to custom-painted cars and architectural surfaces, every creation is designed not just to be seen, but to be experienced.</p>
+    </div>
+</section>
+
+<section class="philosophy-section">
+    <div class="glass-grid">
+        <div class="glass-card reveal">
+            <h3>Emotion</h3>
+            <p>Art is not created for attention. It is created for resonance.</p>
+        </div>
+        <div class="glass-card reveal">
+            <h3>Craft</h3>
+            <p>Every detail is intentional. Every stroke carries weight.</p>
+        </div>
+        <div class="glass-card reveal">
+            <h3>Experience</h3>
+            <p>I don’t create for viewing. I create for feeling.</p>
+        </div>
+    </div>
+</section>
+
+<section class="process-section">
+    <div class="reveal word-fade" id="processText">
+        <h2 style="margin-bottom:30px;">The Process</h2>
+        <p style="max-width:750px; margin:0 auto; font-size:1.1rem;">
+        Each piece begins with observation. Then emotion. Then form. 
+        Whether working on canvas, metal, or structure, the process remains the same—translate feeling into reality.
+        </p>
+    </div>
+</section>
+
+<section class="signature-section">
+    <div class="reveal">
+        <h2 class="signature-quote">“I don’t create art to be seen. I create it to be felt.”</h2>
+        <p style="margin-top:25px; letter-spacing:4px; opacity:0.4; font-size:0.8rem;">THE SOUL</p>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="reveal">
+        <span class="number" data-target="15">0</span>
+        <p>EXHIBITIONS</p>
+    </div>
+    <div class="reveal">
+        <span class="number" data-target="300">0</span>
+        <p>COLLECTORS</p>
+    </div>
+    <div class="reveal">
+        <span class="number" data-target="50">0</span>
+        <p>CUSTOM PROJECTS</p>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="reveal">
+        <h2 style="font-size:2.5rem; margin-bottom:20px;">Begin Your Experience</h2>
+        <p style="margin-bottom:40px; opacity:0.7;">Commission a piece that speaks for you.</p>
+        <a href="collection.html" class="mag-button">Start a Commission</a>
+    </div>
+</footer>
+
+<script>
+// MENU LOGIC
+const menuToggle = document.getElementById('menuToggle');
+const overlay = document.getElementById('overlay');
+const body = document.body;
+
+function openMenu() { body.classList.add('menu-open'); }
+function closeMenu() { body.classList.remove('menu-open'); }
+
+// Toggle on click
+menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    body.classList.contains('menu-open') ? closeMenu() : openMenu();
+});
+
+// Close when clicking outside (overlay)
+overlay.addEventListener('click', closeMenu);
+
+// Close on link click
+document.querySelectorAll('.menu-links a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+});
+
+// WORD FADE LOGIC
+const processPara = document.querySelector('#processText p');
+processPara.innerHTML = processPara.textContent.split(' ').map(word => `<span>${word}</span>`).join(' ');
+
+// INTERSECTION OBSERVER
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            entry.target.classList.add('active');
+            
+            if(entry.target.classList.contains('word-fade')){
+                entry.target.querySelectorAll('span').forEach((span, i) => {
+                    setTimeout(() => {
+                        span.style.opacity = "1";
+                        span.style.transform = "translateY(0)";
+                    }, i * 80);
+                });
+            }
+
+            if(entry.target.querySelector('.number')){
+                animateNumbers(entry.target.querySelector('.number'));
+            }
+        }
+    });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// STATS ANIMATION
+function animateNumbers(el){
+    if(el.classList.contains('counted')) return;
+    el.classList.add('counted');
+    const target = +el.dataset.target;
+    let current = 0;
+    const duration = 2000;
+    const increment = target / (duration / 16);
+
+    const update = () => {
+        current += increment;
+        if(current < target) {
+            el.innerText = Math.ceil(current);
+            requestAnimationFrame(update);
+        } else {
+            el.innerText = target + "+";
+        }
+    };
+    update();
+}
+</script>
+
+</body>
+</html>
